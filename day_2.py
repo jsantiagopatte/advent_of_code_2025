@@ -56,31 +56,31 @@ def part1():
     print(f"Part 1: {ans}")
 
 def part2():
-        #### Part 2
-        folder_name = "input_files"
-        file_name = "day_2.txt"
-        current_dir = os.getcwd()
-        file = open(os.path.join(current_dir, folder_name, file_name), 'r')
-        data = file.readlines()
-        invalid_ids = []
+    #### Part 2
+    folder_name = "input_files"
+    file_name = "day_2.txt"
+    current_dir = os.getcwd()
+    file = open(os.path.join(current_dir, folder_name, file_name), 'r')
+    data = file.readlines()
+    invalid_ids = []
 
-        ranges = data[0].split(',')
-        for curr_range in ranges:
-            limits = curr_range.split('-')
-            start = int(limits[0])
-            end = int(limits[1])
-            full_range = list(range(start, end+1))
-            for id in full_range:
-                factors = get_factors(len(str(id)))
-                for factor in factors:
-                    split_len = factor
-                    all_str_splits = split_string_multiple(str(id), split_len)
-                    if all(item == all_str_splits[0] for item in all_str_splits):
-                        invalid_ids.append(id)
-                        break
-        
-        ans = sum(invalid_ids)
-        print(f"Part 2: {ans}")
+    ranges = data[0].split(',')
+    for curr_range in ranges:
+        limits = curr_range.split('-')
+        start = int(limits[0])
+        end = int(limits[1])
+        full_range = list(range(start, end+1))
+        for id in full_range:
+            factors = get_factors(len(str(id)))
+            for factor in factors:
+                split_len = factor
+                all_str_splits = split_string_multiple(str(id), split_len)
+                if all(item == all_str_splits[0] for item in all_str_splits):
+                    invalid_ids.append(id)
+                    break
+    
+    ans = sum(invalid_ids)
+    print(f"Part 2: {ans}")
 
 
 
