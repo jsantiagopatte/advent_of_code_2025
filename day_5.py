@@ -54,7 +54,7 @@ def new_range_generator(range, range_target):
         ranges_result = [[min_c, max_r]]
     # If range is in the middle: min_c > min_t and max_c < max_t
     elif min_c >= min_t and max_c <= max_t:
-        ranges_result = [[]]
+        return None
     # If range is partly on the right: max_c > max_t and (min_c > min_t and min_c < max_t)
     elif max_c > max_t and (min_c >= min_t and min_c <= max_t):
         min_r = max_t + 1
@@ -100,24 +100,48 @@ def part2(folder_name, file_name):
     data = lib.import_data(folder_name, file_name)
     ranges_list_full = process_range_str(data)
     
-    final_ranges = [ranges_list_full[0]]
-    for range_test in ranges_list_full:
-        pass
-        # Run throgh all the ranges in final ranges
-        # Reset your stored ranges.
-        # Compare the ranges stored in range_test against it using function.
-        # Store the new ranges.
-        # At the end append the resulting ranges to final_ranges.
+    ranges_old = ranges_list_full
+    ranges_new = []
+    diff = 1
+    while diff > 0:
+        ranges_new = []
+        for range_current in ranges_old:
+            for range_target in ranges_old:
+                split = False
+                ranges_test = new_range_generator(range_current, range_target)
+                if ranges_test is not None:
+                    for r in ranges_test:
+                        if r != range_current:
+                            split = True
+                        if r not in ranges_new:
+                            ranges_new.append(r)
+            if split == True and range_current in ranges_new:
+                ranges_new.remove(range_current)
+        
+        diff +=1
+        print(diff)
+        if ranges_new == ranges_old:
+            diff = 0
 
+        ranges_old = ranges_new 
+    
+    ranges_final = ranges_old
+    # Calculate total of all ranges
+    ans = 0
+    for range_food in ranges_final:
+        ans += (range_food[1] - range_food[0]) + 1
+
+    print(ranges_final)
+    print(f"Part 2: {ans}")
 
 
 
 
 
 if __name__ == "__main__":
-    folder_name = "example_files"
-    file_name = "day_5_ex.txt"
-    #part2(folder_name, file_name)
+    folder_name = "input_files"
+    file_name = "day_5.txt"
+    part2(folder_name, file_name)
     #test = new_range_generator([10,11], [5, 10])
-    #print(test)
+    #print(test)\
     
