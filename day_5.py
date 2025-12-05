@@ -75,6 +75,14 @@ def new_range_generator(range, range_target):
 
     return ranges_result
 
+def find_next_highest_value(num, list):
+    try:
+        next_high = [min([x for x in list if x >= num])]
+        return next_high[0]
+    except:
+        return 0
+    
+
     
 def part1(folder_name, file_name):
     ans = 0
@@ -98,40 +106,24 @@ def part1(folder_name, file_name):
 
 def part2(folder_name, file_name):
     data = lib.import_data(folder_name, file_name)
-    ranges_list_full = process_range_str(data)
+    intervals = process_range_str(data)
+    intervals.sort()
     
-    ranges_old = ranges_list_full
-    ranges_new = []
-    diff = 1
-    while diff > 0:
-        ranges_new = []
-        for range_current in ranges_old:
-            for range_target in ranges_old:
-                split = False
-                ranges_test = new_range_generator(range_current, range_target)
-                if ranges_test is not None:
-                    for r in ranges_test:
-                        if r != range_current:
-                            split = True
-                        if r not in ranges_new:
-                            ranges_new.append(r)
-            if split == True and range_current in ranges_new:
-                ranges_new.remove(range_current)
-        
-        diff +=1
-        print(diff)
-        if ranges_new == ranges_old:
-            diff = 0
+    for i, interv in enumerate(intervals):
+        start = interv[0]
+        end = interv[1]
+        for j, other_interv in enumerate(intervals[i+1:]):
+            if end >= other_interv[0]:
+                if end <= other_interv[1]:
+                    intervals[i][1] = other_interv[1]
+                    end = other_interv[1]
+                intervals.remove(other_interv)      
 
-        ranges_old = ranges_new 
-    
-    ranges_final = ranges_old
-    # Calculate total of all ranges
     ans = 0
-    for range_food in ranges_final:
-        ans += (range_food[1] - range_food[0]) + 1
+    for interv in intervals:
+        ans += interv[1] - interv[0] +1
 
-    print(ranges_final)
+
     print(f"Part 2: {ans}")
 
 
@@ -141,6 +133,7 @@ def part2(folder_name, file_name):
 if __name__ == "__main__":
     folder_name = "input_files"
     file_name = "day_5.txt"
+    #print(find_next_highest_value(4, [2, 3]))
     part2(folder_name, file_name)
     #test = new_range_generator([10,11], [5, 10])
     #print(test)\
