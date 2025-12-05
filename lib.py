@@ -43,3 +43,44 @@ def check_location_valid(location, k_max, l_max):
         return True
     else:
         return False
+    
+class map_grid:
+    def __init__(self, grid_string):
+        self.grid = []
+        for line in grid_string:
+            self.grid.append(list(line))
+
+        # Compute bounds of the grid
+        self.max_row = len(self.grid)
+        self.max_col = len(self.grid[0])
+    
+    def get_entry(self, i, j):
+        return self.grid[i][j]
+
+    def check_valid_coord(self, i, j):
+        coord_check = True
+        if i < 0 or i > self.max_row - 1:
+            coord_check = False
+        if j < 0 or j > self.max_col - 1:
+            coord_check = False
+
+        return coord_check
+
+    def get_neighbors_coord(self, i, j):
+        all_rel_neighbors = [[-1, -1], [-1, 0], [-1, +1],
+                            [0, -1], [0, +1],
+                            [+1, -1], [+1, 0], [+1, +1]]
+        all_neighbors = []
+        for rel_neighbor in all_rel_neighbors:
+            all_neighbors.append([i + rel_neighbor[0], j + rel_neighbor[1]])
+        
+        legal_neighbors = []
+        for neighbor in all_neighbors:
+            if self.check_valid_coord(neighbor[0], neighbor[1]):
+                legal_neighbors.append(neighbor)
+        
+        return legal_neighbors
+    
+    def print_grid(self):
+        for row in self.grid:
+            print(row)  

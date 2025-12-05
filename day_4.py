@@ -67,9 +67,7 @@ class map_grid:
     
     def print_grid(self):
         for row in self.grid:
-            print(row)
-
-    # Method to edit a coordinate.    
+            print(row)  
 
 def check_location_valid(location, k_max, l_max):
     k = location[0]
